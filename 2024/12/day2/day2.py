@@ -4,13 +4,14 @@ def main():
     safe_registered_extra = 0
 
     for registro in registros:
-        if rules(registro):
+        if rules_registros(registro):
             safe_registered += 1
-        if rules(registro, extra_rule=True):
-            safe_registered_extra += 1
+        else:
+            if rules_registros(registro, extra_rule=True):
+                safe_registered_extra += 1
 
     print(f"Safe registered: {safe_registered}")
-    print(f"Safe registered extra: {safe_registered_extra}")
+    print(f"Safe registered extra: {safe_registered_extra+safe_registered}")
 
 
 def get_registro() -> list[list[int]]:
@@ -25,7 +26,7 @@ def get_registro() -> list[list[int]]:
         return registros
 
 
-def rules(registro: list[int], extra_rule=False) -> bool:
+def rules_registros(registro: list[int], extra_rule=False) -> bool:
     incremento = None
     previos = None
     for index, level in enumerate(registro):
@@ -41,22 +42,22 @@ def rules(registro: list[int], extra_rule=False) -> bool:
             (incremento and level < previos)
             or (not incremento and level > previos)
             or (level == previos)
+            or (1 < abs(previos - level) > 3)
         ):
             if extra_rule:
-                registro2 = registro.copy()
-                del registro2[index]
-                if rules(registro2):
-                    return True
-                del registro[index - 1]
-                if rules(registro):
-                    return True
-            else:
-                return False
+                bandera = True
+                index_control = 0
+                while bandera:
+                    registro_copy = registro.copy()
+                    del registro_copy[index - index_control]
+                    if rules_registros(registro_copy):
+                        return True
 
-        if 1 < abs(previos - level) > 3:
+                    if index_control == len(registro):
+                        bandera = False
+                    index_control += 1
             return False
         previos = level
-
     return True
 
 
