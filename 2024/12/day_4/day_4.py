@@ -28,7 +28,7 @@ def main():
                         for index, char in enumerate(key)
                     )
 
-                    key_down_left = (fila_n + size < y_len) and all(
+                    key_down_left = (fila_n + size - 1 < y_len) and all(
                         (puzzle[fila_n + index][columna_n - index] == char)
                         for index, char in enumerate(key)
                     )
@@ -43,24 +43,24 @@ def main():
                         for index, char in enumerate(key)
                     )
 
-                    key_down_right = (fila_n + size < y_len) and all(
+                    key_down_right = (fila_n + size - 1 < y_len) and all(
                         (puzzle[fila_n + index][columna_n + index] == char)
                         for index, char in enumerate(key)
                     )
 
                     count_array.extend([key_adelante, key_up_right, key_down_right])
 
-                key_up = (fila_n - size >= 0) and all(
+                key_up = (fila_n - size - 1 >= 0) and all(
                     (puzzle[fila_n - index][columna_n] == char)
                     for index, char in enumerate(key)
                 )
 
-                key_down = (fila_n + size < y_len) and all(
+                key_down = (fila_n + size - 1 < y_len) and all(
                     (puzzle[fila_n - index][columna_n] == char)
                     for index, char in enumerate(key)
                 )
                 count_array.extend([key_up, key_down])
-                # print(count_array)
+                print(count_array)
                 for is_correct in count_array:
                     if is_correct:
                         count += 1
@@ -71,7 +71,7 @@ def main():
 
 def get_puzzle() -> list[list[int]]:
     puzzle = []
-    with open("input.txt", "r") as fichero:
+    with open("test.txt", "r") as fichero:
         while (puzzle_line := fichero.readline()) != "":
             puzzle.append(puzzle_line)
     return puzzle
@@ -79,10 +79,3 @@ def get_puzzle() -> list[list[int]]:
 
 if __name__ == "__main__":
     main()
-
-# print("----------------")
-# if key_down_right:
-#     for index, char in enumerate(key):
-#         print(
-#             f"Fila: [{fila_n - index}] Columna [{columna_n + index}] char:{puzzle[fila_n - index][columna_n + index]}=={char}",
-#         )
